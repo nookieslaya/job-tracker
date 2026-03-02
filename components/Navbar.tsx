@@ -32,7 +32,7 @@ export default function Navbar() {
               <Link href="/dashboard">
                 <Button
                   variant="ghost"
-                  className="text-gray-700 hover:text-black"
+                  className="text-gray-700 border border-gray-200 hover:text-black"
                 >
                   Dashboard
                 </Button>
@@ -71,7 +71,7 @@ export default function Navbar() {
               <Link href="/sign-in">
                 <Button
                   variant="ghost"
-                  className="text-gray-700 hover:text-black"
+                  className="text-gray-700 border border-gray-200 hover:text-black"
                 >
                   Log In
                 </Button>
