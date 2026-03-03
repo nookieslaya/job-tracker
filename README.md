@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Job Tracker
 
-## Getting Started
+Job Tracker is a Next.js app for managing job applications on a Kanban board.
+It supports email/password authentication, automatic board creation for new
+users, and drag-and-drop movement of cards between columns.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- User authentication with Better Auth (sign up, sign in, sign out)
+- Automatic default board setup for each new user
+- Kanban dashboard with drag and drop (`@dnd-kit`)
+- Create, update, move, and delete job applications
+- MongoDB persistence via Mongoose
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19 + TypeScript
+- Tailwind CSS 4 + shadcn/ui + Radix UI
+- Better Auth
+- MongoDB + Mongoose
+- dnd-kit
+
+## Requirements
+
+- Node.js 20+
+- npm
+- MongoDB instance (local or remote)
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017/job-tracker
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open `http://localhost:3000`.
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - run development server
+- `npm run build` - build production app
+- `npm run start` - start production server
+- `npm run lint` - run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+app/
+  api/auth/[...all]/route.ts   # Better Auth API handlers
+  dashboard/page.tsx           # Main Kanban dashboard
+  sign-in/page.tsx             # Sign-in page
+  sign-up/page.tsx             # Sign-up page
+components/
+  kanban-board.tsx             # Board UI and drag/drop logic
+  create-job-dialog.tsx        # Create application dialog
+  job-application-card.tsx     # Card UI
+lib/
+  actions/job-applications.ts  # Server actions for CRUD/move
+  auth/                        # Auth server/client setup
+  db.ts                        # MongoDB connection helper
+  models/                      # Mongoose models
+  hooks/useBoards.ts           # Client board state hook
+  init-user-boart.ts           # Default board initialization for new users
+proxy.ts                       # Redirect logged-in users from auth pages
+```
 
-## Deploy on Vercel
+## Data Model (High Level)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `Board`: board metadata + ordered column ids
+- `Column`: column metadata + ordered job application ids
+- `JobApplication`: company, position, status, notes, salary, links, tags,
+  description, order, and ownership fields
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- New users get a default board (`Job Hunt`) with starter columns.
+- Drag-and-drop order is persisted with server actions and dashboard
+  revalidation.
