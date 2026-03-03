@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 import { initializeUserBoard } from "../init-user-boart";
 
 
-const client = new MongoClient(process.env.MONGODB_URI!);
+const mongooseInstance = await connectDB();
+const client = mongooseInstance.connection.getClient();
 const db = client.db();
 
 export const auth = betterAuth({
